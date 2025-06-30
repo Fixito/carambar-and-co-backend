@@ -1,35 +1,45 @@
 {
   "name": "carambar-and-co-backend",
-  "version": "1.0.0",
-  "main": "src/index.ts",
   "type": "module",
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js"
-  },
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/Fixito/carambar-and-co-backend#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Fixito/carambar-and-co-backend.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/Fixito/carambar-and-co-backend/issues"
   },
-  "homepage": "https://github.com/Fixito/carambar-and-co-backend#readme",
-  "description": "",
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/morgan": "^1.9.10",
-    "@types/node": "^24.0.7",
-    "dotenv": "^17.0.0",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+  "keywords": [],
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "start": "node dist/index.js",
+    "prepare": "husky"
   },
   "dependencies": {
     "express": "^5.1.0",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.16.1",
+    "@types/express": "^5.0.3",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.0.7",
+    "dotenv": "^17.0.0",
+    "eslint": "^9.29.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }
