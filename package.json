@@ -21,17 +21,22 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "start": "node dist/index.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:seed": "tsx src/scripts/seed.ts"
   },
   "dependencies": {
     "express": "^5.1.0",
-    "morgan": "^1.10.0"
+    "http-status-codes": "^2.3.0",
+    "morgan": "^1.10.0",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.16.1",
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.7",
+    "@types/sequelize": "^4.28.20",
     "dotenv": "^17.0.0",
     "eslint": "^9.29.0",
     "husky": "^9.1.7",
