@@ -1,19 +1,31 @@
 import type { NextFunction, Request, Response } from 'express';
-import type ErrorResponse from './interfaces/error-response.types.js';
-
 import process from 'node:process';
+import { StatusCodes } from 'http-status-codes';
+
+import { AppError } from './utils/errors.js';
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
-  res.status(404);
+  res.status(StatusCodes.NOT_FOUND);
   const error = new Error(`Not Found - ${req.originalUrl}`);
   next(error);
 }
 
-export function errorHandler(err: Error, _req: Request, res: Response<ErrorResponse>, _next: NextFunction) {
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-  res.status(statusCode);
-  res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+export function errorHandler(err: Error | AppError, _req: Request, res: Response, _next: NextFunction) {
+  let statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+  let message = 'Erreur interne du serveur';
+
+  if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+  }
+  else if (res.statusCode !== StatusCodes.OK) {
+    statusCode = res.statusCode;
+    message = err.message;
+  }
+
+  res.status(statusCode).json({
+    success: false,
+    error: message,
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
   });
 }
