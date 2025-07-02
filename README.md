@@ -31,3 +31,11 @@ pnpm start
 # Recréer la base de données avec des données d'exemple
 pnpm run db:seed
 ```
+
+## 📚 Documentation
+
+### Accès à la documentation
+
+- **Interface Swagger UI** : http://localhost:5000/api-docs
+- **API de base** : http://localhost:5000/api/v1/blagues
+- **Page d'accueil** : http://localhost:5000/

@@ -39,11 +39,10 @@ export async function getRandomJoke(): Promise<JokeAttributes> {
     return joke.toJSON();
   }
   catch (error) {
-    // Re-lancer les erreurs métier sans transformation
     if (error instanceof NotFoundError || error instanceof DatabaseError) {
       throw error;
     }
-    // Transformer les erreurs système en erreurs métier
+
     throw new DatabaseError('Erreur lors de la récupération de la blague aléatoire');
   }
 }

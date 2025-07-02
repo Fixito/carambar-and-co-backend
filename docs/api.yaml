@@ -1,0 +1,241 @@
+openapi: 3.0.0
+info:
+  title: Carambar & Co API
+  version: 1.0.0
+  description: API REST pour la gestion des blagues Carambar & Co
+
+servers:
+  - url: http://localhost:5000
+    description: Serveur de développement
+
+tags:
+  - name: Blagues
+    description: Gestion des blagues Carambar & Co
+
+paths:
+  /api/v1/blagues:
+    get:
+      tags: [Blagues]
+      summary: Récupérer toutes les blagues
+      description: Retourne la liste de toutes les blagues, triées par date de création décroissante
+      responses:
+        '200':
+          description: Liste des blagues récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: number
+                        example: 11
+                      jokes:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Joke'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [Blagues]
+      summary: Créer une nouvelle blague
+      description: Ajoute une nouvelle blague à la base de données
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JokeInput'
+            example:
+              text: Que dit un escargot quand il croise une limace ?
+              answer: Regarde le nudiste !
+      responses:
+        '201':
+          description: Blague créée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Joke'
+                  message:
+                    type: string
+                    example: Blague créée avec succès
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v1/blagues/random:
+    get:
+      tags: [Blagues]
+      summary: Récupérer une blague aléatoire
+      description: Retourne une blague choisie aléatoirement parmi toutes les blagues disponibles
+      responses:
+        '200':
+          description: Blague aléatoire récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Joke'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v1/blagues/{id}:
+    get:
+      tags: [Blagues]
+      summary: Récupérer une blague par son ID
+      description: Retourne une blague spécifique en utilisant son identifiant unique
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Identifiant UUID de la blague
+          schema:
+            type: string
+            format: uuid
+          example: 270f2062-41c1-4f82-9eb5-4d9859fb1fe2
+      responses:
+        '200':
+          description: Blague récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Joke'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    Joke:
+      type: object
+      required: [text, answer]
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identifiant unique de la blague
+          example: 270f2062-41c1-4f82-9eb5-4d9859fb1fe2
+        text:
+          type: string
+          minLength: 1
+          description: Question de la blague
+          example: Que dit un escargot quand il croise une limace ?
+        answer:
+          type: string
+          minLength: 1
+          description: Réponse de la blague
+          example: Regarde le nudiste !
+        createdAt:
+          type: string
+          format: date-time
+          description: Date de création de la blague
+          example: '2025-07-02T10:30:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date de dernière modification de la blague
+          example: '2025-07-02T10:30:00.000Z'
+
+    JokeInput:
+      type: object
+      required: [text, answer]
+      properties:
+        text:
+          type: string
+          minLength: 1
+          description: Question de la blague
+          example: Que dit un escargot quand il croise une limace ?
+        answer:
+          type: string
+          minLength: 1
+          description: Réponse de la blague
+          example: Regarde le nudiste !
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: Message d'erreur
+          example: Une erreur est survenue
+
+    ValidationError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: Données invalides
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: text
+              message:
+                type: string
+                example: Le texte de la blague est obligatoire
+
+  responses:
+    BadRequest:
+      description: Requête malformée ou données invalides
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+
+    NotFound:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error: Blague non trouvée
+
+    InternalServerError:
+      description: Erreur interne du serveur
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error: Erreur interne du serveur

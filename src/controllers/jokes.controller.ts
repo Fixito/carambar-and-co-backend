@@ -19,7 +19,7 @@ export async function getAllJokes(_req: Request, res: Response<ApiResponse<Jokes
   const jokes = await JokesService.getAllJokes();
   const count = await JokesService.countJokes();
 
-  res.json({
+  res.status(StatusCodes.OK).json({
     success: true,
     data: {
       count,
@@ -30,7 +30,7 @@ export async function getAllJokes(_req: Request, res: Response<ApiResponse<Jokes
 
 export async function getRandomJoke(_req: Request, res: Response<ApiResponse>) {
   const joke = await JokesService.getRandomJoke();
-  res.json({
+  res.status(StatusCodes.OK).json({
     success: true,
     data: joke,
   });
@@ -40,7 +40,7 @@ export async function getJokeById(req: Request<{ id: string }>, res: Response<Ap
   const { id } = req.params;
   const joke = await JokesService.getJokeById(id);
 
-  res.json({
+  res.status(StatusCodes.OK).json({
     success: true,
     data: joke,
   });
