@@ -3,6 +3,7 @@
     "target": "es2022",
     "lib": ["es2022"],
     "moduleDetection": "force",
+    "rootDir": "src",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
@@ -15,5 +16,9 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "eslint.config.js",
+    "dist"
+  ]
 }
