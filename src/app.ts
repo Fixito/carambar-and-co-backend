@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import cors from 'cors';
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 import morgan from 'morgan';
@@ -23,6 +24,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
 }));
 
 app.use(morgan('dev'));
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (_req, res) => {
