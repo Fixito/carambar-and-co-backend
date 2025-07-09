@@ -14,7 +14,7 @@
     "url": "https://github.com/Fixito/carambar-and-co-backend/issues"
   },
   "keywords": [],
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
