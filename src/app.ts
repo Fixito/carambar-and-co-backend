@@ -8,11 +8,15 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yaml';
 
 import * as middlewares from './middlewares.js';
+import { applySecurity, corsConfig } from './middlewares/security.middleware.js';
+
 import jokesRoutes from './routes/jokes.routes.js';
 
 import 'dotenv/config';
 
 const app = express();
+
+applySecurity(app);
 
 const swaggerDocument = YAML.parse(
   readFileSync(join(import.meta.dirname, '..', 'docs', 'api.yaml'), 'utf8'),
@@ -24,8 +28,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
 }));
 
 app.use(morgan('dev'));
-app.use(cors());
-app.use(express.json());
+app.use(cors(corsConfig));
+app.use(express.json({ limit: '1mb' }));
 
 app.get('/', (_req, res) => {
   res.status(StatusCodes.OK).json({
