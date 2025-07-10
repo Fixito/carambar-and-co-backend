@@ -7,7 +7,8 @@ import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yaml';
 
-import * as middlewares from './middlewares.js';
+import { errorHandler } from './middlewares/error-handler.middleware.js';
+import { notFound } from './middlewares/not-found.middleware.js';
 import { applySecurity, corsConfig } from './middlewares/security.middleware.js';
 
 import jokesRoutes from './routes/jokes.routes.js';
@@ -45,7 +46,7 @@ app.get('/', (_req, res) => {
 
 app.use('/api/v1/blagues', jokesRoutes);
 
-app.use(middlewares.notFound);
-app.use(middlewares.errorHandler);
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
